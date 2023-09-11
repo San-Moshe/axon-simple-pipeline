@@ -4,15 +4,18 @@ import queue
 import numpy as np
 from typing import List, Tuple, Optional
 
+
 class Detector:
-    def __init__(self, data_src: queue.Queue, data_dst: queue.Queue):
+    def __init__(self, data_src: queue.Queue, data_dst: queue.Queue, stop_signal):
         self.src_data_queue = data_src
         self.dst_data_queue = data_dst
+        self.stop_signal = stop_signal
+
         self.frame_counter = 0
         self.prev_frame = None
 
     def start(self):
-        while True:
+        while not self.stop_signal.is_set():
             try:
                 frame = self.read_frame()
             except queue.Empty:

@@ -5,14 +5,19 @@ import cv2
 
 
 class Presenter:
-    def __init__(self, data_src: queue.Queue):
+    def __init__(self, data_src: queue.Queue, stop_signal):
         self.src_data_queue = data_src
+        self.stop_signal = stop_signal
 
         desired_frame_rate = 25
         self.delay = int(1000 / desired_frame_rate)
 
+    def stop(self):
+        cv2.destroyAllWindows()
+        self.stop_signal.set()
+
     def start(self):
-        while True:
+        while not self.stop_signal.is_set():
             try:
                 frame, boxes = self.read_data()
             except queue.Empty:
@@ -20,6 +25,8 @@ class Presenter:
             else:
                 if self.show_frame(frame, boxes):
                     break
+
+        self.stop()
 
     def read_data(self) -> Dict[str, Any]:
         return self.src_data_queue.get(timeout=1)
