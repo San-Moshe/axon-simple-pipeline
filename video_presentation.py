@@ -1,5 +1,4 @@
 import queue
-import time
 from typing import Any, Dict
 
 import cv2
