@@ -10,7 +10,7 @@ class Presenter:
         self.src_data_queue = data_src
         self.stop_signal = stop_signal
 
-        desired_frame_rate = 25
+        desired_frame_rate = 30
         self.delay = int(1000 / desired_frame_rate)
 
     def stop(self):
