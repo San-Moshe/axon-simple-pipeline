@@ -1,3 +1,4 @@
+import datetime
 import queue
 from typing import Any, Dict
 
@@ -40,7 +41,14 @@ class Presenter:
                 blurred_roi = cv2.GaussianBlur(roi, (25, 25), 0)
                 frame[y1:y2, x1:x2] = blurred_roi
 
+        current_time = self.get_current_time()
+        cv2.putText(frame, current_time, (20, 40), cv2.FONT_HERSHEY_DUPLEX, 1, (0, 255, 0), 2)
         cv2.imshow('frame', frame)
 
         if cv2.waitKey(self.delay) == ord('q'):
             return True
+
+    def get_current_time(self):
+        current_time = datetime.datetime.now()
+        time_str = current_time.strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+        return time_str
