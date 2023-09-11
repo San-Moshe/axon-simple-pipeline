@@ -1,10 +1,14 @@
+import queue
+import time
+
 import cv2
 
 
 class StreamReader:
-    def __init__(self, file_path):
+    def __init__(self, file_path, data_dst: queue.Queue):
         self.video_path = file_path.as_posix()
         self.cap = None
+        self.dst_data_queue = data_dst
 
     def start(self):
         self.cap = cv2.VideoCapture(self.video_path)
@@ -18,10 +22,10 @@ class StreamReader:
             if not ret:
                 break
 
-            cv2.imshow("name", frame)
+            self.send_next(frame)
 
-            if cv2.waitKey(25) & 0xFF == ord('q'):
-                break
+    def send_next(self, frame):
+        self.dst_data_queue.put(frame)
 
     def stop(self):
         self.cap.release()
