@@ -29,6 +29,10 @@ class Presenter:
             for (x1, y1, x2, y2) in bounding_boxes:
                 cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
 
+                roi = frame[y1:y2, x1:x2]
+                blurred_roi = cv2.GaussianBlur(roi, (25, 25), 0)
+                frame[y1:y2, x1:x2] = blurred_roi
+
         cv2.imshow('frame', frame)
 
         if cv2.waitKey(self.delay) == ord('q'):
